@@ -24,6 +24,9 @@ def ismatch(pattern, args):
     # :param pattern: a tuple containing what to match
     # :param args: method arguments passed.
 
+    pattern = map(str, pattern)
+    args = map(str, args)
+
     if len(pattern) != len(args):
         return False
 
