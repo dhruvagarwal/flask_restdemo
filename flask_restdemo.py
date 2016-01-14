@@ -6,7 +6,7 @@ class CustomApi(Api):
     def __init__(self, app=None):
         super(CustomApi, self).__init__(app=app)
 
-    def proxy_add_resource(self, resource, *urls, **kwargs):
+    def add_resource(self, resource, *urls, **kwargs):
         if kwargs.get('demo_dict'):
             resource = get_demo_resource(resource, kwargs['demo_dict'])
         super(CustomApi, self).add_resource(resource, *urls, **kwargs)
@@ -31,3 +31,5 @@ def get_demo_view(demo_responses, default_view=null_view):
                 return response
         return default_view(args)
     return required_view
+
+
