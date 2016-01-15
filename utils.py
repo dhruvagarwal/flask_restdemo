@@ -1,4 +1,4 @@
-def null_view(self):
+def null_view(self, *args, **kwargs):
     return {}
 
 def match(pattern, string):
