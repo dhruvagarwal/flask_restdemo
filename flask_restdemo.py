@@ -1,6 +1,9 @@
+import copy
+
 from flask_restful import Api, Resource
 
 from .utils import null_view, ismatch
+
 
 class CustomApi(Api):
     def __init__(self, app=None):
@@ -26,14 +29,19 @@ def get_demo_resource(resource, demo_dict):
 
 
 def get_demo_view(demo_responses, default_view=null_view):
-    def required_view(self, **kwargs):
+    def required_view(self, *args, **kwargs):
         # fetching args in order from kwargs
-        args = [kwargs[x] for x in default_view.func_code.co_varnames[1:]]
+        if not demo_responses.get('keys'):
+            raise Exception("No Keys specified in Demo Dict Method")
+        mapped_args = [kwargs[x] for x in demo_responses['keys']]
 
-        for pattern, response in demo_responses.iteritems():
-            if ismatch(pattern, args):
+        pattern_responses = copy.copy(demo_responses)
+        pattern_responses.pop('keys')
+
+        for pattern, response in pattern_responses.iteritems():
+            if ismatch(pattern, mapped_args):
                 return response
-        return default_view(self, **kwargs)
+        return default_view(self, *args, **kwargs)
     return required_view
 
 
